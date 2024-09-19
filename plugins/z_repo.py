@@ -16,7 +16,7 @@ async def help(client: Client, message: Message):
             [
                 [
                     InlineKeyboardButton(
-                        "🌱ƨσʋяcɛ🌱", url=f"https://github.com/vishalpandeynkp1/VIPNOBITAMUSIC_REPO"
+                        "🌱ƨσʋяcɛ🌱", url=f"https://envs.sh/w_V.mp4"
                     )
                 ]
             ]
@@ -33,7 +33,7 @@ async def clones(client: Client, message: Message):
             [
                 [
                     InlineKeyboardButton(
-                        "🌱ƨσʋяcɛ🌱", url=f"https://github.com/vishalpandeynkp1/VIPNOBITAMUSIC_REPO"
+                        "🌱ƨσʋяcɛ🌱", url=f"https://envs.sh/w_V.mp4"
                     )
                 ]
             ]
