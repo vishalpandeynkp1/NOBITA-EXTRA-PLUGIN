@@ -160,7 +160,7 @@ async def greet_new_members(_, member: ChatMemberUpdated):
                             [
                                 InlineKeyboardButton(
                                     f"✪ ᴛᴀᴘ ᴛᴏ ᴄʟᴏsᴇ ✪",
-                                    url=f"https://t.me/ok_win_predictions",
+                                    url=f"https://t.me/CN_STATUS",
                                 )
                             ]
                         ]
@@ -176,7 +176,7 @@ async def greet_new_members(_, member: ChatMemberUpdated):
 
         # Add the modified condition here
         if member.new_chat_member and not member.old_chat_member:
-            welcome_text = f"""**๏ ʜᴇʟʟᴏ ☺️** {user.mention}\n\n**๏ ᴡᴇʟᴄᴏᴍᴇ ɪɴ 🥀** {chat_name}\n\n**๏ ʜᴀᴠᴇ ᴀ ɴɪᴄᴇ ᴅᴀʏ ✨** @{user.username}"""
+            welcome_text = f"""**๏ ʜᴇʟʟᴏ ☺️** {user.mention}\n\n**๏ ᴅᴇᴋʜᴏ ᴍᴇʜᴍᴀɴ ᴀᴀʏᴇ ʜᴀɪ ᴋᴏɪ ɪɴᴋᴀ ꜱᴡᴀɢᴀᴛ ᴋʀᴏ  🥀** {chat_name}\n\n**๏ ʙᴀᴛᴀᴇʏᴇ ꜱɪʀ/ᴍᴀ'ᴀᴍ ᴋʏᴀ ʟᴇɴɢɪ ᴛʜᴀɴᴅᴀ ʏᴀ ɢᴀʀᴀᴍ  ʏᴀʜᴀ ꜱᴀʙ ᴋᴜᴄʜʜ ᴍɪʟᴇɢᴀ ɴᴀʀᴀᴍ ✨** @{user.username}"""
             
             await app.send_message(chat_id, text=welcome_text, reply_markup=reply_markup)
     except Exception as e:
