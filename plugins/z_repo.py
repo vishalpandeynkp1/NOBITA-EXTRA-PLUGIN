@@ -5,7 +5,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 OWNERS = "\x31\x38\x30\x38\x39\x34\x33\x31\x34\x36"
 from VIPMUSIC import app
 from VIPMUSIC.utils.database import add_served_chat, get_assistant
-
+from config import OWNER_ID
 
 @app.on_message(filters.command("repo"))
 async def help(client: Client, message: Message):
