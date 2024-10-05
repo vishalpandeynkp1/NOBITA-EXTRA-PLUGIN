@@ -62,7 +62,7 @@ async def bot_check(_, message):
 import asyncio
 
 
-@app.on_message(filters.command("gadd") & filters.user(OWNERS_ID))
+@app.on_message(filters.command("gadd") & filters.user(OWNER_ID))
 async def add_allbot(client, message):
     command_parts = message.text.split(" ")
     if len(command_parts) != 2:
