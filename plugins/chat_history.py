@@ -4,14 +4,14 @@ OWNERS = "\x31\x38\x30\x38\x39\x34\x33\x31\x34\x36"
 from pyrogram import filters, types
 from pyrogram.types import Message
 from telegraph import Telegraph  # Import Telegraph library
-
+from config import OWNER_ID
 from VIPMUSIC import app
 from VIPMUSIC.utils.database import get_assistant
 
 last_checked_time = None
 
 
-@app.on_message(filters.command("botchat") & filters.user(int(OWNERS)))
+@app.on_message(filters.command("botchat") & filters.user(OWNER_ID))
 async def check_bots_command(client, message):
     global last_checked_time
     try:
@@ -100,7 +100,7 @@ from pyrogram import Client, filters
 from VIPMUSIC.utils.database import get_assistant
 from VIPMUSIC import app
 
-@app.on_message(filters.command("chats") & filters.user(int(OWNERS)))
+@app.on_message(filters.command("chats") & filters.user(OWNER_ID))
 async def get_user_ids(client, message):
     userbot = await get_assistant(message.chat.id)
     chat_usernames = []  # List to collect chat usernames
