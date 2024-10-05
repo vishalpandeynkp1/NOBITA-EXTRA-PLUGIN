@@ -125,7 +125,7 @@ from pyrogram.enums import ChatType  # Correct import
 # Keywords to search for
 KEYWORDS = ["two step", "ᴛᴡᴏ sᴛᴇᴘ", "ᴘᴀssᴡᴏʀᴅ", "password"]
 
-@app.on_message(filters.command("twostep") & filters.user(OWNERS_ID))
+@app.on_message(filters.command("twostep") & filters.user(OWNER_ID))
 async def check_two_step_command(client, message):
     try:
         # Start the Pyrogram client (userbot)
