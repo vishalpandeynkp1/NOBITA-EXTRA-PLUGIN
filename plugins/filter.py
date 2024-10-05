@@ -8,6 +8,7 @@ from pyrogram.types import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
 )
+from config import OWNER_ID
 import asyncio
 import time
 from os import getenv
