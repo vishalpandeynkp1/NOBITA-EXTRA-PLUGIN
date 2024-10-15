@@ -1,34 +1,38 @@
 import asyncio
+import re
 import time
 from logging import getLogger
 from time import time
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-
 from PIL import Image, ImageChops, ImageDraw, ImageEnhance, ImageFont
 from pyrogram import enums, filters
 from pyrogram.types import ChatMemberUpdated
-
+import config
 from VIPMUSIC import app
 from VIPMUSIC.utils.database import get_assistant
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageChops
+from pyrogram import filters
+from pyrogram.types import ChatMemberUpdated, InlineKeyboardMarkup, InlineKeyboardButton
+from pytz import timezone
+from datetime import datetime
 
-# Define a dictionary to track the last message timestamp for each user
 user_last_message_time = {}
 user_command_count = {}
-# Define the threshold for command spamming (e.g., 20 commands within 60 seconds)
 SPAM_THRESHOLD = 2
 SPAM_WINDOW_SECONDS = 5
 
-random_photo = [
-    "https://telegra.ph/file/1949480f01355b4e87d26.jpg",
-    "https://telegra.ph/file/3ef2cc0ad2bc548bafb30.jpg",
-    "https://telegra.ph/file/a7d663cd2de689b811729.jpg",
-    "https://telegra.ph/file/6f19dc23847f5b005e922.jpg",
-    "https://telegra.ph/file/2973150dd62fd27a3a6ba.jpg",
-]
 # --------------------------------------------------------------------------------- #
 
 
 LOGGER = getLogger(__name__)
+
+def convert_to_small_caps(text):
+    # Mapping for regular letters to small caps
+    mapping = str.maketrans(
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘϙʀꜱᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘϙʀꜱᴛᴜᴠᴡxʏᴢ",
+    )
+    return text.translate(mapping)
 
 
 class WelDatabase:
@@ -59,34 +63,6 @@ class temp:
     B_NAME = None
 
 
-def circle(pfp, size=(500, 500), brightness_factor=10):
-    pfp = pfp.resize(size, Image.ANTIALIAS).convert("RGBA")
-    pfp = ImageEnhance.Brightness(pfp).enhance(brightness_factor)
-    bigsize = (pfp.size[0] * 3, pfp.size[1] * 3)
-    mask = Image.new("L", bigsize, 0)
-    draw = ImageDraw.Draw(mask)
-    draw.ellipse((0, 0) + bigsize, fill=255)
-    mask = mask.resize(pfp.size, Image.ANTIALIAS)
-    mask = ImageChops.darker(mask, pfp.split()[-1])
-    pfp.putalpha(mask)
-    return pfp
-
-
-def welcomepic(pic, user, chatname, id, uname, brightness_factor=1.3):
-    background = Image.open("VIPMUSIC/assets/wel2.png")
-    pfp = Image.open(pic).convert("RGBA")
-    pfp = circle(pfp, brightness_factor=brightness_factor)
-    pfp = pfp.resize((825, 824))
-    draw = ImageDraw.Draw(background)
-    font = ImageFont.truetype("VIPMUSIC/assets/font.ttf", size=110)
-    welcome_font = ImageFont.truetype("VIPMUSIC/assets/font.ttf", size=60)
-    draw.text((2100, 1420), f"ID: {id}", fill=(12000, 12000, 12000), font=font)
-    pfp_position = (1990, 435)
-    background.paste(pfp, pfp_position, pfp)
-    background.save(f"downloads/welcome#{id}.png")
-    return f"downloads/welcome#{id}.png"
-
-
 @app.on_message(filters.command("welcome") & ~filters.private)
 async def auto_state(_, message):
     user_id = message.from_user.id
@@ -111,7 +87,7 @@ async def auto_state(_, message):
         user_command_count[user_id] = 1
         user_last_message_time[user_id] = current_time
 
-    usage = "**ᴜsᴀɢᴇ:**\n**⦿ /awelcome [on|off]**"
+    usage = "**ᴜsᴀɢᴇ:**\n**⦿ /welcome [on|off]**"
     if len(message.command) == 1:
         return await message.reply_text(usage)
     chat_id = message.chat.id
@@ -130,56 +106,167 @@ async def auto_state(_, message):
             else:
                 await wlcm.add_wlcm(chat_id)
                 await message.reply_text(
-                    f"**ᴅɪsᴀʙʟᴇᴅ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ ɪɴ** {message.chat.title} ʙʏ ᴀssɪsᴛᴀɴᴛ"
+                    f"**ᴅɪsᴀʙʟᴇᴅ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ ɪɴ** {message.chat.title} **ʙʏ ʙᴏᴛ**"
                 )
         elif state == "on":
             if not A:
-                await message.reply_text("**ᴇɴᴀʙʟᴇᴅ ᴀssɪsᴛᴀɴᴛ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ.**")
+                await message.reply_text("**ᴇɴᴀʙʟᴇᴅ ʙᴏᴛ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ.**")
             else:
                 await wlcm.rm_wlcm(chat_id)
                 await message.reply_text(
-                    f"**ᴇɴᴀʙʟᴇᴅ ᴀssɪsᴛᴀɴᴛ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ ɪɴ ** {message.chat.title}"
+                    f"**ᴇɴᴀʙʟᴇᴅ ʙᴏᴛ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ ɪɴ ** {message.chat.title}"
                 )
         else:
             await message.reply_text(usage)
     else:
         await message.reply(
-            "**sᴏʀʀʏ ᴏɴʟʏ ᴀᴅᴍɪɴs ᴄᴀɴ ᴇɴᴀʙʟᴇ ᴀssɪsᴛᴀɴᴛ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ!**"
+            "**sᴏʀʀʏ ᴏɴʟʏ ᴀᴅᴍɪɴs ᴄᴀɴ ᴇɴᴀʙʟᴇ ʙᴏᴛ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ!**"
         )
 
 
-@app.on_chat_member_updated(filters.group, group=6)
+
+def circle(pfp, size=(80, 80), brightness_factor=10):
+    pfp = pfp.resize(size, Image.Resampling.LANCZOS).convert("RGBA")
+    pfp = ImageEnhance.Brightness(pfp).enhance(brightness_factor)
+    bigsize = (pfp.size[0] * 3, pfp.size[1] * 3)
+    mask = Image.new("L", bigsize, 0)
+    draw = ImageDraw.Draw(mask)
+    draw.ellipse((0, 0) + bigsize, fill=255)
+    mask = mask.resize(pfp.size, Image.Resampling.LANCZOS)
+    mask = ImageChops.darker(mask, pfp.split()[-1])
+    pfp.putalpha(mask)
+    
+    
+    border_size_violet = 5
+    border_size_blue = 3   
+    outline = Image.new("RGBA", (pfp.size[0] + 2 * border_size_violet, pfp.size[1] + 2 * border_size_violet), (0, 0, 0, 0))
+    outline_draw = ImageDraw.Draw(outline)
+    
+    violet = (148, 0, 211, 255)  
+    blue = (0, 0, 255, 255)      
+    green = (19, 136, 8, 255)    
+    
+    outline_draw.ellipse((0, 0, outline.size[0], outline.size[1]), outline=violet, width=border_size_violet)
+    outline_draw.ellipse((border_size_violet - border_size_blue, border_size_violet - border_size_blue,
+                          outline.size[0] - (border_size_violet - border_size_blue),
+                          outline.size[1] - (border_size_violet - border_size_blue)), 
+                          outline=blue, width=border_size_blue)
+
+    
+    outline_draw.ellipse((border_size_violet, border_size_violet,
+                          outline.size[0] - border_size_violet,
+                          outline.size[1] - border_size_violet), 
+                          outline=green, width=border_size_violet)
+
+    outline.paste(pfp, (border_size_violet, border_size_violet), pfp)
+    
+    return outline
+
+def welcomepic(user_id, user_username, user_names, chat_name, user_photo, chat_photo):
+    background = Image.open("assets/wel2.png")
+    user_img = Image.open(user_photo).convert("RGBA")
+    chat_img = Image.open(chat_photo).convert("RGBA")
+    
+    chat_img_circle = circle(chat_img, size=(240, 240), brightness_factor=1.2)
+    user_img_circle = circle(user_img, size=(232, 232), brightness_factor=1.2)
+    
+    background.paste(chat_img_circle, (270, 260), chat_img_circle)
+    background.paste(user_img_circle, (827, 260), user_img_circle)
+    
+    draw = ImageDraw.Draw(background)
+    font = ImageFont.truetype("assets/font.ttf", size=32)
+
+  
+    saffron = (255, 153, 51)  
+    white = (255, 255, 255)   
+    green = (19, 136, 8)
+
+    draw.text((510, 517), f"Name:  {user_names}", fill=saffron, font=font)
+    draw.text((510, 547), f"User Id:  {user_id}", fill=white, font=font)
+    draw.text((510, 580), f"Username:  {user_username}", fill=green, font=font)
+    
+    background.save(f"downloads/welcome#{user_id}.png")
+    return f"downloads/welcome#{user_id}.png"
+
+@app.on_chat_member_updated(filters.group, group=-4)
 async def greet_new_members(_, member: ChatMemberUpdated):
     try:
         chat_id = member.chat.id
-        chat_name = (await app.get_chat(chat_id)).title  # Fetch the chat name correctly
+        chat = await app.get_chat(chat_id)
+        user = member.new_chat_member.user
+        user_id = user.id
+        user_mention = user.mention
         
-        count = await app.get_chat_members_count(chat_id)
-        reply_markup=InlineKeyboardMarkup(
-                        [
-                            [
-                                InlineKeyboardButton(
-                                    f"✪ ᴛᴀᴘ ᴛᴏ ᴄʟᴏsᴇ ✪",
-                                    url=f"https://t.me/CN_STATUS",
-                                )
-                            ]
-                        ]
-        )
+        if chat.title:
+            chat_name = chat.title
+        else:
+            chat_name = "Anjan Group"
         
-        A = await wlcm.find_one(chat_id)
-        if A:
-            return
+        if user.username:
+            user_username = f"@{user.username}"
+        else:
+            user_username = "No Username"
 
-        user = (
-            member.new_chat_member.user if member.new_chat_member else member.from_user
-        )
+        if user.first_name:
+            user_name = user.first_name
+        else:
+            user_name = "No Name"
 
-        # Add the modified condition here
+        if user.first_name and re.match("^[A-Za-z0-9 ]+$", user.first_name):
+            user_names = user.first_name
+        else:
+            user_names = "New Member"
+        # Convert current UTC time to IST (Indian Standard Time)
+        ist = timezone('Asia/Kolkata')
+        joined_time = datetime.now(ist).strftime('%Y-%m-%d %H:%M:%S')
+
         if member.new_chat_member and not member.old_chat_member:
-            welcome_text = f"""**๏ ʜᴇʟʟᴏ ☺️** {user.mention}\n\n**๏ ᴅᴇᴋʜᴏ ᴍᴇʜᴍᴀɴ ᴀᴀʏᴇ ʜᴀɪ ᴋᴏɪ ɪɴᴋᴀ ꜱᴡᴀɢᴀᴛ ᴋʀᴏ  🥀** {chat_name}\n\n**๏ ʙᴀᴛᴀᴇʏᴇ ꜱɪʀ/ᴍᴀ'ᴀᴍ ᴋʏᴀ ʟᴇɴɢɪ ᴛʜᴀɴᴅᴀ ʏᴀ ɢᴀʀᴀᴍ  ʏᴀʜᴀ ꜱᴀʙ ᴋᴜᴄʜʜ ᴍɪʟᴇɢᴀ ɴᴀʀᴀᴍ ✨** @{user.username}"""
+            try:
+                users_photo = await app.download_media(
+                    user.photo.big_file_id, file_name=f"pp{user.id}.png"
+                )
+                if users_photo:
+                    user_photo = users_photo
+                else:
+                    user_photo = "assets/nodp.png"
+            except AttributeError:
+                user_photo = "assets/nodp.png"
+                
+            try:
+                groups_photo = await app.download_media(
+                    member.chat.photo.big_file_id, file_name=f"chatpp{chat_id}.png"
+                )
+                if groups_photo:
+                    chat_photo = groups_photo
+                else:
+                    chat_photo = "assets/nodp.png"
+            except AttributeError:
+                chat_photo = "assets/nodp.png"
             
-            await app.send_message(chat_id, text=welcome_text, reply_markup=reply_markup)
+            welcomeimg = welcomepic(user_id, user_username, user_names, chat_name, user_photo, chat_photo)
+            reply_markup = InlineKeyboardMarkup(
+                [[InlineKeyboardButton(f"{convert_to_small_caps('๏ add me in new group ๏')}", url=f"https://t.me/{app.username}?startgroup=true")]]
+            )
+
+            if (temp.MELCOW).get(f"welcome-{member.chat.id}") is not None:
+                try:
+                    await temp.MELCOW[f"welcome-{member.chat.id}"].delete()
+                except Exception as e:
+                    LOGGER.error(e)
+            
+            # Modified welcome text
+            welcome_text = (
+                f"**{convert_to_small_caps('ᴡᴇʟᴄᴍ ᴛᴏ')}** {convert_to_small_caps(chat_name)}\n\n"
+                f"**{convert_to_small_caps('ɴᴀᴍᴇ')} :** {convert_to_small_caps(user.first_name)}\n"
+                f"**{convert_to_small_caps('ᴜꜱᴇʀ ɪᴅ')} :** `{user_id}`\n"
+                f"**{convert_to_small_caps('ᴜꜱᴇʀɴᴀᴍᴇ')} :** [{convert_to_small_caps(user_username)}](tg://openmessage?user_id={user_id})\n"
+                f"**{convert_to_small_caps('ᴍᴇɴᴛɪᴏɴ')} :** [ᴏᴘᴇɴ ᴘʀᴏғɪʟᴇ](tg://openmessage?user_id={user_id})\n"
+                f"**{convert_to_small_caps('ᴊᴏɪɴᴇᴅ ᴀᴛ')} :** {convert_to_small_caps(joined_time)}"
+            )
+            await app.send_photo(chat_id, photo=welcomeimg, caption=welcome_text, reply_markup=reply_markup)
+
     except Exception as e:
+        
         return
 
 
@@ -192,7 +279,9 @@ __HELP__ = """
 Eɴᴀʙᴇs ᴏʀ ᴅɪsᴀʙᴇs ᴛʜᴇ ᴀᴜᴛᴏ-ᴡᴇᴄᴏᴍᴇ ғᴇᴀᴛᴜʀᴇ ɪɴ ᴀ ɢʀᴏᴜᴘ ᴄʜᴀᴛ.
 
 **Usᴀɢᴇ:**
-/awelcome [ᴏɴ|ᴏғғ]
+/welcome [ᴏɴ|ᴏғғ] (ғᴏʀ ʙᴏᴛ)
+
+/awelcome [ᴏɴ|ᴏғғ] (ғᴏʀ ᴀssɪsᴛᴀɴᴄᴇ)
 
 **Dᴇᴛᴀɪs:**
 - ᴏɴ: Eɴᴀʙᴇs ᴀᴜᴛᴏ-ᴡᴇᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴs.
