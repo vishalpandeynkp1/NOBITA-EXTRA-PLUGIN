@@ -22,3 +22,5 @@
 
 
 # For more help checkout [𝐍𝐎𝐁𝐈𝐓𝐀 𝐌𝐔𝐒𝐈𝐂](https://github.com/vishalpandeynkp1/VIPNOBITAMUSIC_REPO)
+
+![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=vishalpandeynkp1&repo=NOBITA-EXTRA-PLUGIN&theme=flag-india)
