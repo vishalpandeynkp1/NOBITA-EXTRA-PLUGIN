@@ -10,7 +10,4 @@ SafoneAPI
 nekos.py
 telegraph
 uuid
-git+https://github.com/Vivekkumar-IN/TheApi@main
-telegram
-Pyromod
-Tgcrypto
+git+https://github.com/Vivekkumar-IN/TheApi@mainypto
