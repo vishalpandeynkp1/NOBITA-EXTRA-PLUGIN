@@ -23,4 +23,9 @@
 
 # For more help checkout [𝐍𝐎𝐁𝐈𝐓𝐀 𝐌𝐔𝐒𝐈𝐂](https://github.com/vishalpandeynkp1/VIPNOBITAMUSIC_REPO)
 
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
+
 ![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=vishalpandeynkp1&repo=NOBITA-EXTRA-PLUGIN&theme=flag-india)
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
+
