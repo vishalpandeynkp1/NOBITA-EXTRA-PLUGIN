@@ -4,7 +4,7 @@ from pyrogram.enums import ChatType
 from strings import get_string
 from VIPMUSIC import app
 from VIPMUSIC.utils import VIPbin
-MU = "UNKNOWN_VASHU" #Dont change it seever connecter
+MU = "CHIN_TAPAK_DAM_DAM_xBOT" #Dont change it seever connecter
 from VIPMUSIC.utils.database import get_assistant, get_lang
 import asyncio
 from os import getenv
