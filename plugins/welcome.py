@@ -125,13 +125,13 @@ async def auto_state(_, message):
 
 
 
-def circle(pfp, size=(200, 200), brightness_factor=10):
+def circle(pfp, size=(400, 400), brightness_factor=10):
     pfp = pfp.resize(size, Image.Resampling.LANCZOS).convert("RGBA")
     pfp = ImageEnhance.Brightness(pfp).enhance(brightness_factor)
     bigsize = (pfp.size[0] * 3, pfp.size[1] * 3)
     mask = Image.new("L", bigsize, 0)
     draw = ImageDraw.Draw(mask)
-    draw.ellipse((0, 0) + bigsize, fill=255)
+    draw.ellipse((30, 30) + bigsize, fill=355)
     mask = mask.resize(pfp.size, Image.Resampling.LANCZOS)
     mask = ImageChops.darker(mask, pfp.split()[-1])
     pfp.putalpha(mask)
@@ -170,7 +170,7 @@ def welcomepic(user_id, user_username, user_names, chat_name, user_photo, chat_p
     user_img_circle = circle(user_img, size=(400, 400), brightness_factor=1.2)
     
     
-    background.paste(user_img_circle, (400, 380), user_img_circle)
+    background.paste(user_img_circle, (210, 220), user_img_circle)
     
     draw = ImageDraw.Draw(background)
     font = ImageFont.truetype("assets/font.ttf", size=32)
