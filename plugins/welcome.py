@@ -167,7 +167,7 @@ def welcomepic(user_id, user_username, user_names, chat_name, user_photo, chat_p
     user_img = Image.open(user_photo).convert("RGBA")
     
     
-    user_img_circle = circle(user_img, size=(650, 650), brightness_factor=1.2)
+    user_img_circle = circle(user_img, size=(450, 650), brightness_factor=1.2)
     
     
     background.paste(user_img_circle, (320, 300), user_img_circle)
