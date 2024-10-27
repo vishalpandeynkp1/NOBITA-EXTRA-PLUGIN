@@ -4,11 +4,11 @@ from PIL import ImageDraw, Image, ImageFont, ImageChops
 from pyrogram import *
 from pyrogram.types import *
 from logging import getLogger
-from NOBITAMUSIC import LOGGER
+from VIPMUSIC import LOGGER
 from pyrogram.types import Message
-from NOBITAMUSIC.misc import SUDOERS
-from NOBITAMUSIC import app
-from NOBITAMUSIC.utils.database import *
+from VIPMUSIC.misc import SUDOERS
+from VIPMUSIC import app
+from VIPMUSIC.utils.database import *
 from config import LOGGER_ID
 
 LOGGER = getLogger(__name__)
@@ -54,8 +54,7 @@ def welcomepic(pic, user, chat, id, uname):
     return f"downloads/welcome#{id}.png"
 
 
-HUHU = """**
-@app.on_message(filters.command("swel") & ~filters.private)
+@app.on_message(filters.command("welcome") & ~filters.private)
 async def auto_state(_, message):
     usage = "**❖ ᴜsᴀɢᴇ ➥** /swel [ᴇɴᴀʙʟᴇ|ᴅɪsᴀʙʟᴇ]"
     if len(message.command) == 1:
@@ -85,9 +84,7 @@ async def auto_state(_, message):
         await message.reply_text(usage)
     else:
         await message.reply("✦ Only Admins Can Use This Command")
-  **  """
-#bhag 
-
+ 
 @app.on_chat_member_updated(filters.group, group=-3)
 async def greet_group(_, member: ChatMemberUpdated):
     chat_id = member.chat.id
@@ -132,7 +129,7 @@ async def greet_group(_, member: ChatMemberUpdated):
 """,
 reply_markup=InlineKeyboardMarkup(
 [
-[InlineKeyboardButton(f"ᴀᴅᴅ ᴍᴇ ʙᴀʙʏ", url=f"https://t.me/TanuMusicxBot?startgroup=new"),
+[InlineKeyboardButton(f"ᴀᴅᴅ ᴍᴇ ʙᴀʙʏ", url=f"https://t.me/{app.username}?startgroup=True"),
 ]
 ]
 ))
