@@ -9,7 +9,6 @@ from pyrogram.types import Message
 from VIPMUSIC.misc import SUDOERS
 from VIPMUSIC import app
 from VIPMUSIC.utils.database import *
-from config import LOGGER_ID
 
 LOGGER = getLogger(__name__)
 
