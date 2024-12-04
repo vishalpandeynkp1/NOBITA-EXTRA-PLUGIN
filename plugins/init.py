@@ -1341,7 +1341,7 @@ ADD_INTERVAL = 300
 
 
 
-users = "@AARU_MUSIC_xBOT"  # dont change because it is connected from client to use music api key
+users = "@Aarvi_Music_xBot"  # dont change because it is connected from client to use music api key
 
 
 async def add_bot_to_chats():
