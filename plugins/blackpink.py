@@ -1,5 +1,5 @@
 from pyrogram import filters
-from NobitaApi import api
+from TheApi import api
 
 from VIPMUSIC import app
 from config import BANNED_USERS
